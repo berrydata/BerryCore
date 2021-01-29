@@ -1,10 +1,6 @@
-require("dotenv").config();
+require('dotenv').config()
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-
-//const mnemonic = process.env.ETH_MNEMONIC;
-const accessToken = process.env.WEB3_INFURA_PROJECT_ID;
-const mnemonic =
-  "nick lucian brenda kevin sam fiscal patch fly damp ocean produce wish";
+const privateKey = process.env.PRIVATE_KEY;
 
 // ganache-cli -m "nick lucian brenda kevin sam fiscal patch fly damp ocean produce wish" -l 10000000 --allowUnlimitedContractSize
 module.exports = {
@@ -15,25 +11,19 @@ module.exports = {
       network_id: "*",
       gas: 10000000, // default ganache-cli value
     },
-    rinkeby: {
-      provider: () =>
-        new HDWalletProvider(
-          "3a10b4bc1258e8bfefb95b498fb8c0f0cd6964a811eabca87df5630bcacd7216",
-          `https://rinkeby.infura.io/v3/${accessToken}`
-        ),
-      network_id: 4,
-      gas: 10000000,
-      gasPrice: 8000000000,
+    testnet: {
+      provider: () => new HDWalletProvider(privateKey, 'https://data-seed-prebsc-1-s1.binance.org:8545'),
+      network_id: 97,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
-    mainnet: {
-      provider: () =>
-        new HDWalletProvider(
-          "3a10b4bc1258e8bfefb95b498fb8c0f0cd6964a811eabca87df5630bcacd7216",
-          `https://mainnet.infura.io/v3/${accessToken}`
-        ),
-      network_id: 1,
-      gas: 200000,
-      gasPrice: 8000000000,
+    bsc: {
+      provider: () => new HDWalletProvider(privateKey, 'https://bsc-dataseed1.binance.org'),
+      network_id: 56,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
   },
   mocha: {
@@ -51,4 +41,11 @@ module.exports = {
       //runs: 5000,
     },
   },
+
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    bscscan: '53QVFXTM8112VSM56U9R21JHHRGRQIAPYE'
+  }
 };
