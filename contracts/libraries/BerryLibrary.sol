@@ -190,7 +190,7 @@ library BerryLibrary {
         //Verifying Miner Eligibility
         bytes32 _hashMsgSender = keccak256(abi.encode(msg.sender));
         require(self.stakerDetails[msg.sender].currentStatus == 1, "Miner status is not staker");
-        require(now - self.uintVars[_hashMsgSender] > 3 minutes, "Miner can only win rewards once per 3 min");
+        //require(now - self.uintVars[_hashMsgSender] > 1 minutes, "Miner can only win rewards once per 1 min");
         require(_requestId[0] ==  self.currentMiners[0].value,"Request ID is wrong");
         require(_requestId[1] ==  self.currentMiners[1].value,"Request ID is wrong");
         require(_requestId[2] ==  self.currentMiners[2].value,"Request ID is wrong");
