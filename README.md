@@ -1,6 +1,6 @@
 # Berry Oracle
 
-Berry Oracle is based on Tellor Oracle version 2.0.0, improves token economics, and deployed on Binance Smart Chain. It provides one price feed solution on Binance Smart Chain for Peer to Peer Mode. User can request price feed by add tip, and Berry miner will provide data to Berry decentrialized oracle. Tellor works as bitcoin's POW, but its token does not work as Bitcoin, it is unlimited. Berry follows Bitcoin period halfing token supply rule.
+Berry Oracle is based on Tellor Oracle version 2.0.0, improves token economics, and deployed on Binance Smart Chain. It provides one price feed solution on Binance Smart Chain for Peer to Peer Mode. User can request price feed by add tip, and Berry miner will provide data to Berry decentrialized oracle. Tellor works as bitcoin's POW, but its token does not work as Bitcoin, it is unlimited. BRY supply is limited, and can be mined for three years.
 
 
 ### Instructions for quick start with Truffle Deployment <a name="Quick-Deployment"> </a> 
