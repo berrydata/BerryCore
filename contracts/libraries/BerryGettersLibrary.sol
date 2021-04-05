@@ -426,7 +426,7 @@ library BerryGettersLibrary {
     * @param _address
     * @return bool true if address is in white list
     */
-    function whiteListState(BerryStorage.BerryStorageStruct storage self, address _address) return (bool) {
+    function whiteListState(BerryStorage.BerryStorageStruct storage self, address _address) returns (bool) {
         return self.whiteList[_address];
     }
 
