@@ -339,4 +339,12 @@ contract BerryGetters {
         return berry.totalSupply();
     }
 
+    /**
+    * @dev Get the white list state of a given address
+    * @param _address
+    * @return bool true if address is in white list
+    */
+    function whiteListState(address _address) external view return (bool) {
+        return berry.whiteListState(_address);
+    }
 }

@@ -65,6 +65,15 @@ contract Berry {
     }
 
     /**
+    * @dev mark address as white list address or not
+    * @param _markAddr is the marked address
+    * @param _white is white or not
+    */
+    function marketAddress(address _markAddr, bool _white) external {
+        berry.marketAddress(_markAddress, _white);
+    }
+
+    /**
     * @dev Add tip to Request value from oracle
     * @param _requestId being requested to be mined
     * @param _tip amount the requester is willing to pay to be get on queue. Miners

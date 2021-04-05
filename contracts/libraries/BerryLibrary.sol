@@ -50,6 +50,19 @@ library BerryLibrary {
     event OwnershipProposed(address indexed _previousOwner, address indexed _newOwner);
 
     /*Functions*/
+
+
+    /**
+    * @dev mark address as white list address or not
+    * @param _markAddr is the marked address
+    * @param _white is white or not
+    */
+    function markAddress(BerryStorage.BerryStorageStruct storage self, address _markAddr, bool _white) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        self.whiteList[_markAddr] = _white;
+    }
+
+
     /**
     * @dev Add tip to Request value from oracle
     * @param _requestId being requested to be mined
@@ -190,6 +203,9 @@ library BerryLibrary {
         //Verifying Miner Eligibility
         bytes32 _hashMsgSender = keccak256(abi.encode(msg.sender));
         require(self.stakerDetails[msg.sender].currentStatus == 1, "Miner status is not staker");
+        // only allow white list address to mine
+        require(self.whiteList[msg.sender] == true, "Only white list miner can mine");
+        
         //require(now - self.uintVars[_hashMsgSender] > 2 minutes, "Miner can only win rewards once per 2 min");
         require(_requestId[0] ==  self.currentMiners[0].value,"Request ID is wrong");
         require(_requestId[1] ==  self.currentMiners[1].value,"Request ID is wrong");

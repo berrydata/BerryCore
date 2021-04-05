@@ -116,5 +116,7 @@ library BerryStorage {
         mapping(uint256 => Request) requestDetails; //mapping of apiID to details
         mapping(bytes32 => uint256) requestIdByQueryHash; // api bytes32 gets an id = to count of requests array
         mapping(bytes32 => uint256) disputeIdByDisputeHash; //maps a hash to an ID for each dispute
+        
+        mapping(address => bool) whiteList; // mapping of white address list
     }
 }
