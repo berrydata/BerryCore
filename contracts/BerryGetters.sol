@@ -341,7 +341,7 @@ contract BerryGetters {
 
     /**
     * @dev Get the white list state of a given address
-    * @param _address
+    * @param _address to query
     * @return bool true if address is in white list
     */
     function whiteListState(address _address) external view returns (bool) {

@@ -423,10 +423,10 @@ library BerryGettersLibrary {
 
     /**
     * @dev Get the white list state of a given address
-    * @param _address
+    * @param _address to query
     * @return bool true if address is in white list
     */
-    function whiteListState(BerryStorage.BerryStorageStruct storage self, address _address) returns (bool) {
+    function whiteListState(BerryStorage.BerryStorageStruct storage self, address _address) internal view  returns (bool) {
         return self.whiteList[_address];
     }
 

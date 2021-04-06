@@ -69,8 +69,8 @@ contract Berry {
     * @param _markAddr is the marked address
     * @param _white is white or not
     */
-    function marketAddress(address _markAddr, bool _white) external {
-        berry.marketAddress(_markAddress, _white);
+    function markAddress(address _markAddr, bool _white) external {
+        berry.markAddress(_markAddr, _white);
     }
 
 
