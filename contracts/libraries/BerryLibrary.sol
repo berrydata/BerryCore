@@ -350,7 +350,7 @@ library BerryLibrary {
     /**
     * @dev set yield pool info
     * @param _address is the yield pool address
-    * @param percent is the ratio to set
+    * @param _percent is the ratio to set
     */
     function setYieldInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
@@ -364,7 +364,7 @@ library BerryLibrary {
     /**
     * @dev set burn pool info
     * @param _address is the burn pool address
-    * @param percent is the ratio to set
+    * @param _percent is the ratio to set
     */
     function setBurnInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");

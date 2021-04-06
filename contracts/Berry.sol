@@ -77,7 +77,7 @@ contract Berry {
     /**
     * @dev set yield pool info
     * @param _address is the yield pool address
-    * @param percent is the ratio to set
+    * @param _percent is the ratio to set
     */
     function setYieldInfo(address _address, uint256 _percent) public {
         berry.setYieldInfo(_address, _percent);
@@ -86,7 +86,7 @@ contract Berry {
     /**
     * @dev set burn pool info
     * @param _address is the burn pool address
-    * @param percent is the ratio to set
+    * @param _percent is the ratio to set
     */
     function setBurnInfo(address _address, uint256 _percent) public {
         berry.setBurnInfo(_address, _percent);
