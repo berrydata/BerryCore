@@ -73,6 +73,26 @@ contract Berry {
         berry.marketAddress(_markAddress, _white);
     }
 
+
+    /**
+    * @dev set yield pool info
+    * @param _address is the yield pool address
+    * @param percent is the ratio to set
+    */
+    function setYieldInfo(address _address, uint256 _percent) public {
+        berry.setYieldInfo(_address, _percent);
+    }
+
+    /**
+    * @dev set burn pool info
+    * @param _address is the burn pool address
+    * @param percent is the ratio to set
+    */
+    function setBurnInfo(address _address, uint256 _percent) public {
+        berry.setBurnInfo(_address, _percent);
+    }
+
+
     /**
     * @dev Add tip to Request value from oracle
     * @param _requestId being requested to be mined

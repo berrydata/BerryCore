@@ -32,6 +32,11 @@ library BerryLibrary {
     bytes32 public constant slotProgress =0x6c505cb2db6644f57b42d87bd9407b0f66788b07d0617a2bc1356a0e69e66f9a; //keccak256("slotProgress")
     bytes32 public constant pending_owner = 0x44b2657a0f8a90ed8e62f4c4cceca06eacaa9b4b25751ae1ebca9280a70abd68; //keccak256("pending_owner")
     bytes32 public constant currentRequestId = 0x7584d7d8701714da9c117f5bf30af73b0b88aca5338a84a21eb28de2fe0d93b8; //keccak256("currentRequestId")
+    bytes32 public constant yieldPercent = 0x70b2ffb6a98efda5749d08845d7bccc2bdcf5b8564a90e74802a6cf1b9dea4bb; // keccak256("yieldPercent")
+    bytes32 public constant burnPercent = 0xfb521aaf4e98a115df03e1e2810b2af6a7a7adf13d1eb67b50d724dab07f0e28; // keccak256("burnPercent")
+
+    bytes32 public constant yield_pool_address  = 0x268a9e1f1b69e20810e6bb1a6f81129ea85a7f64c856278523bd5c2c0b511314; // keccak256("yield_pool_address")
+    bytes32 public constant burn_pool_address = 0xc6faac53a081d6520f6a4907c3ff5551778c97ec2101c9513fbd7d78eff89354; // keccak256("burn_pool_address")
 
 
     event TipAdded(address indexed _sender, uint256 indexed _requestId, uint256 _tip, uint256 _totalTips);
@@ -50,19 +55,6 @@ library BerryLibrary {
     event OwnershipProposed(address indexed _previousOwner, address indexed _newOwner);
 
     /*Functions*/
-
-
-    /**
-    * @dev mark address as white list address or not
-    * @param _markAddr is the marked address
-    * @param _white is white or not
-    */
-    function markAddress(BerryStorage.BerryStorageStruct storage self, address _markAddr, bool _white) public {
-        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
-        self.whiteList[_markAddr] = _white;
-    }
-
-
     /**
     * @dev Add tip to Request value from oracle
     * @param _requestId being requested to be mined
@@ -266,9 +258,19 @@ library BerryLibrary {
         if (self.uintVars[keccak256("height")] > 518400) {
             reward = 0;
         } else {
-	    reward = 9645061728395060000;
+	        reward = 9645061728395060000;
         }
 
+        uint256 yieldAmount = reward.mul(self.uintVars[yieldPercent]).div(1000000);
+        // pay to yield pool
+        if (yieldAmount != 0)
+            BerryTransfer.doTransfer(self, address(this), self.addressVars[yield_pool_address], yieldAmount);
+
+        uint256 burnAmount = reward.mul(self.uintVars[burnPercent]).div(1000000);
+        if (burnAmount != 0)
+            BerryTransfer.doTransfer(self, address(this), self.addressVars[burn_pool_address], burnAmount);
+
+        reward = reward.sub(yieldAmount).sub(burnAmount);
         //pay the miners
         for (uint i = 0; i < 5; i++) {
             BerryTransfer.doTransfer(self, address(this), a[i], (reward + self.uintVars[currentTotalTips]) / 5);
@@ -333,6 +335,43 @@ library BerryLibrary {
                 self.requestQ[_request.apiUintVars[requestQPosition]] += _tip;
             }
         }
+    }
+
+    /**
+    * @dev mark address as white list address or not
+    * @param _markAddr is the marked address
+    * @param _white is white or not
+    */
+    function markAddress(BerryStorage.BerryStorageStruct storage self, address _markAddr, bool _white) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        self.whiteList[_markAddr] = _white;
+    }
+
+    /**
+    * @dev set yield pool info
+    * @param _address is the yield pool address
+    * @param percent is the ratio to set
+    */
+    function setYieldInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        require(self.uintVars[burnPercent].add(_percent) < 1000000, "yield and burn percent should not above 1");
+        require(_address != address(0), "invalid yield pool address");
+
+        self.addressVars[yield_pool_address] = _address;
+        self.uintVars[yieldPercent] = percent;
+    }
+
+    /**
+    * @dev set burn pool info
+    * @param _address is the burn pool address
+    * @param percent is the ratio to set
+    */
+    function setBurnInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 percent) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        require(self.uintVars[yieldPercent].add(percent) < 1000000, "yield and burn percent should not above 1");
+
+        self.addressVars[burn_pool_address] = _address;
+        self.uintVars[burnPercent] = percent;
     }
 
 
