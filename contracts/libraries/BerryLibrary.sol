@@ -261,12 +261,12 @@ library BerryLibrary {
 	        reward = 9645061728395060000;
         }
 
-        uint256 yieldAmount = reward.mul(self.uintVars[yieldPercent]).div(1000000);
+        uint256 yieldAmount = reward.mul(self.uintVars[yieldPercent]).div(1e6);
         // pay to yield pool
         if (yieldAmount != 0)
             BerryTransfer.doTransfer(self, address(this), self.addressVars[yield_pool_address], yieldAmount);
 
-        uint256 burnAmount = reward.mul(self.uintVars[burnPercent]).div(1000000);
+        uint256 burnAmount = reward.mul(self.uintVars[burnPercent]).div(1e6);
         if (burnAmount != 0)
             BerryTransfer.doTransfer(self, address(this), self.addressVars[burn_pool_address], burnAmount);
 
@@ -354,11 +354,11 @@ library BerryLibrary {
     */
     function setYieldInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
-        require(self.uintVars[burnPercent].add(_percent) < 1000000, "yield and burn percent should not above 1");
+        require(self.uintVars[burnPercent].add(_percent) < 1e6, "sum of yield and burn percent is greater than 1");
         require(_address != address(0), "invalid yield pool address");
 
         self.addressVars[yield_pool_address] = _address;
-        self.uintVars[yieldPercent] = percent;
+        self.uintVars[yieldPercent] = _percent;
     }
 
     /**
@@ -366,12 +366,12 @@ library BerryLibrary {
     * @param _address is the burn pool address
     * @param percent is the ratio to set
     */
-    function setBurnInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 percent) public {
+    function setBurnInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
-        require(self.uintVars[yieldPercent].add(percent) < 1000000, "yield and burn percent should not above 1");
+        require(self.uintVars[yieldPercent].add(_percent) < 1e6, "sum of yield and burn percent is greater than 1");
 
         self.addressVars[burn_pool_address] = _address;
-        self.uintVars[burnPercent] = percent;
+        self.uintVars[burnPercent] = _percent;
     }
 
 
