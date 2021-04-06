@@ -354,6 +354,10 @@ library BerryLibrary {
     */
     function setYieldInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        if (self.addressVars[yield_pool_address] == address(0)) {
+            self.uintVars[burnPercent] = 0;
+            self.unitVars[yieldPercent] = 0;
+        }
         require(self.uintVars[burnPercent].add(_percent) < 1e6, "sum of yield and burn percent is greater than 1");
         require(_address != address(0), "invalid yield pool address");
 
@@ -368,6 +372,11 @@ library BerryLibrary {
     */
     function setBurnInfo(BerryStorage.BerryStorageStruct storage self, address _address, uint256 _percent) public {
         require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity");
+        if (self.addressVars[yield_pool_address] == address(0)) {
+            self.uintVars[burnPercent] = 0;
+            self.unitVars[yieldPercent] = 0;
+        }
+        
         require(self.uintVars[yieldPercent].add(_percent) < 1e6, "sum of yield and burn percent is greater than 1");
 
         self.addressVars[burn_pool_address] = _address;
