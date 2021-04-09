@@ -258,8 +258,9 @@ library BerryLibrary {
         if (self.uintVars[keccak256("height")] > 518400) {
             reward = 0;
         } else {
-	        reward = 9645061728395060000;
+            reward = 9645061728395060000;
         }
+        uint256 add_supply = reward;
 
         uint256 yieldAmount = reward.mul(self.uintVars[yieldPercent]).div(1e6);
         // pay to yield pool
@@ -277,7 +278,7 @@ library BerryLibrary {
         }
 
         //update the total supply
-        self.uintVars[keccak256("total_supply")] += reward;
+        self.uintVars[keccak256("total_supply")] += add_supply;
     }
 
 
