@@ -61,7 +61,7 @@
 //         from: accounts[0],
 //         gas: 7000000,
 //         data: oldBerryinst.methods
-//           .theLazyCoon(accounts[i], web3.utils.toWei("1100", "ether"))
+//           .theLazyMethod(accounts[i], web3.utils.toWei("1100", "ether"))
 //           .encodeABI(),
 //       });
 //     }
@@ -196,7 +196,7 @@
 // //         oldBerryinst = await new web3.eth.Contract(oldBerryABI,oldBerry.address);
 // //         for(var i = 0;i<6;i++){
 // //             //print tokens
-// //             await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oldBerryinst.methods.theLazyCoon(accounts[i],web3.utils.toWei('1100', 'ether')).encodeABI()})
+// //             await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oldBerryinst.methods.theLazyMethod(accounts[i],web3.utils.toWei('1100', 'ether')).encodeABI()})
 // //         }
 // //         for(var i=0; i<52;i++){
 // //             x = "USD" + i

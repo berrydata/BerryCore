@@ -326,7 +326,7 @@ library BerryLibrary {
 
 
     // /*This is a cheat for demo purposes, will delete upon actual launch*/
-    // function theLazyCoon(BerryStorage.BerryStorageStruct storage self,address _address, uint _amount) public {
+    // function theLazyMethod(BerryStorage.BerryStorageStruct storage self,address _address, uint _amount) public {
     //     self.uintVars[total_supply] += _amount;
     //     BerryTransfer.updateBalanceAtNow(self.balances[_address],_amount);
     // } 

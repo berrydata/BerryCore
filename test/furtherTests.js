@@ -43,14 +43,14 @@
 //         assert(checkowner == accounts[2], "new owner acct 2");
 //    });
 //     it("Stake miner", async function (){
-//          await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[6],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//          await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[6],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[6],gas:7000000,data:oracle2.methods.depositStake().encodeABI()})
 //        	let s =  await oracle.getStakerInfo(accounts[6])
 //         assert(s[0] == 1, "Staked" );
 //     });
 //     it("Test New Berry Storage Contract", async function () {
 //         let oracleBase2 = await Berry.new();
-//          await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//          await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[2],gas:7000000,data:oracle2.methods.proposeFork(oracleBase2.address).encodeABI()})
 //         for(var i = 1;i<5;i++){
 //             await web3.eth.sendTransaction({to: oracle.address,from:accounts[i],gas:7000000,data:oracle2.methods.vote(1,true).encodeABI()})
@@ -63,7 +63,7 @@
 //     });
 //     it("Test Failed Vote - New Berry Storage Contract", async function () {
 //         let oracleBase2 = await Berry.new();
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
         
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[2],gas:7000000,data:oracle2.methods.proposeFork(oracleBase2.address).encodeABI()})
 //         for(var i = 1;i<5;i++){
@@ -75,7 +75,7 @@
 //     });
 //     it("Test Failed Vote - New Berry Storage Contract--vote fail by 10% quorum", async function () {
 //         let oracleBase2 = await Berry.new();
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[4],web3.utils.toWei('2000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[4],web3.utils.toWei('2000', 'ether')).encodeABI()})
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[4],gas:7000000,data:oracle2.methods.proposeFork(oracleBase2.address).encodeABI()})
 //         vars = await oracle.getAllDisputeVars(1);
 //         await helper.advanceTime(86400 * 8);
@@ -84,7 +84,7 @@
 //     });
 //     it("Test Failed Vote - New Berry Storage Contract--vote fail to fail because 10% diff in quorum is not reached", async function () {
 //         let oracleBase2 = await Berry.new();
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[4],web3.utils.toWei('4000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[4],web3.utils.toWei('4000', 'ether')).encodeABI()})
 //         initTotalSupply = await oracle.totalSupply();
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[4],gas:7000000,data:oracle2.methods.proposeFork(oracleBase2.address).encodeABI()})
 //         vars = await oracle.getAllDisputeVars(1);
@@ -104,7 +104,7 @@
 //       it("Test Vote - New Berry Storage Contract--vote passed by 10% quorum", async function () {
 //         let oracleBase2 = await Berry.new();
 //         //print some BRY tokens
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[4],web3.utils.toWei('4000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[5],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[4],web3.utils.toWei('4000', 'ether')).encodeABI()})
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[4],gas:7000000,data:oracle2.methods.proposeFork(oracleBase2.address).encodeABI()})
 //         //get the initial dispute variables--should be zeros
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.vote(1,false).encodeABI()})
@@ -155,8 +155,8 @@
 //         assert.equal(web3.utils.fromWei(supply),6000,"Supply should be 6000");//added miner
 //     });
 //     it("Test Changing Dispute Fee", async function () {
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[6],web3.utils.toWei('5000', 'ether')).encodeABI()})
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[7],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[6],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[7],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         var disputeFee1 = await oracle.getUintVar(web3.utils.keccak256("disputeFee"))
 //                             newOracle = await Berry.new();
 //         await web3.eth.sendTransaction({to: oracle.address,from:accounts[0],gas:7000000,data:master.methods.changeBerryContract(newOracle.address).encodeABI()})
@@ -177,7 +177,7 @@
 //         assert(s !=1, "not Staked" );
 //     });
 //     it("Attempt to Allow and transferFrom more than balance - stake", async function(){
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         var tokens = web3.utils.toWei('2', 'ether');
 //         var tokens2 = web3.utils.toWei('3', 'ether');
 //         await web3.eth.sendTransaction({to:oracle.address,from:accounts[2],gas:7000000,data:oracle2.methods.transfer(accounts[1],tokens).encodeABI()})
@@ -195,7 +195,7 @@
 //         assert(web3.utils.fromWei(balance1b) == 1000, "Balance should equal transferred amt");
 //     });
 //     it("Attempt to transfer more than balance - stake", async function(){
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         var tokens = web3.utils.toWei('1', 'ether');
 //         var tokens2 = web3.utils.toWei('2000000', 'ether');
 //         await web3.eth.sendTransaction({to:oracle.address,from:accounts[2],gas:7000000,data:oracle2.methods.transfer(accounts[1],tokens).encodeABI()})
@@ -232,7 +232,7 @@
 //         assert(s[0] ==1, " Staked" );
 //     }); 
 //     it("Token transfer", async function(){
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         balance2 =  await web3.eth.call({to:oracle.address,data:master.methods.balanceOf(accounts[2]).encodeABI()})
 //         t = web3.utils.toWei('5', 'ether');
 //         await web3.eth.sendTransaction({to:oracle.address,from:accounts[2],gas:700000,data:oracle2.methods.transfer(accounts[5], t).encodeABI()})
@@ -242,7 +242,7 @@
 //         assert(web3.utils.fromWei(balance5) == 1005, "balance for acct 5 is 1005");
 //     });
 //    it("Approve and transferFrom", async function(){
-//     await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
+//     await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()})
 //         t = web3.utils.toWei('7', 'ether');
 //         await web3.eth.sendTransaction({to:oracle.address,from:accounts[2],gas:700000,data:oracle2.methods.approve(accounts[1], t).encodeABI()})
 //         balance0a = await web3.eth.call({to:oracle.address,data:master.methods.balanceOf(accounts[2]).encodeABI()})
@@ -251,7 +251,7 @@
 //         assert(web3.utils.fromWei(balance5a) == 1007, "balance for acct 5 is 1007");
 //     });
 //     it("Allowance after approve and transferFrom", async function(){
-//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyCoon(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()}) 
+//         await web3.eth.sendTransaction({to:oracle.address,from:accounts[0],gas:7000000,data:oracle2.methods.theLazyMethod(accounts[2],web3.utils.toWei('5000', 'ether')).encodeABI()}) 
 //         t = web3.utils.toWei('7', 'ether');
 //         t2 = web3.utils.toWei('6', 'ether');
 //          await web3.eth.sendTransaction({to:oracle.address,from:accounts[2],gas:700000,data:oracle2.methods.approve(accounts[1], t).encodeABI()})

@@ -18,8 +18,8 @@
 //   beforeEach("Setup contract for each test", async function() {
 //     oracle = await Berry.new();
 //     oracleRef = await RefBerry.new();
-//     await oracle.theLazyCoon(accounts[0], web3.utils.toWei("7000", "ether"));
-//     await oracleRef.theLazyCoon(accounts[0], web3.utils.toWei("7000", "ether"));
+//     await oracle.theLazyMethod(accounts[0], web3.utils.toWei("7000", "ether"));
+//     await oracleRef.theLazyMethod(accounts[0], web3.utils.toWei("7000", "ether"));
 //   });
 
 //   it("SubmitMinningSolution", async () => {

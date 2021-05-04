@@ -34,7 +34,7 @@ module.exports = function() {
     let ins = Oracle.at(myOracle).then(ins=>{
       console.log(ins)
       for(i=0;i< myarr.length;i++){
-           ins.theLazyCoon(myarr[i],2000000000000000000000).then(res=>
+           ins.theLazyMethod(myarr[i],2000000000000000000000).then(res=>
             {console.log('newBalance', myarr[i])}
             )
            

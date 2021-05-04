@@ -40,7 +40,7 @@
 //         from: accounts[0],
 //         gas: 7000000,
 //         data: oldBerryinst.methods
-//           .theLazyCoon(accounts[i], web3.utils.toWei("7000", "ether"))
+//           .theLazyMethod(accounts[i], web3.utils.toWei("7000", "ether"))
 //           .encodeABI(),
 //       });
 //     }
@@ -128,7 +128,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     dispBal1 = await oracle.balanceOf(accounts[1]);
@@ -148,7 +148,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("500", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("500", "ether"))
 //         .encodeABI(),
 //     });
 //     for (var i = 0; i < 5; i++) {
@@ -174,7 +174,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     balance1 = await oracle.balanceOf(accounts[2]);
@@ -220,7 +220,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[6], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[6], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     await web3.eth.sendTransaction({
@@ -258,7 +258,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[3], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[3], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     await web3.eth.sendTransaction({
@@ -416,7 +416,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[6], web3.utils.toWei("3000", "ether"))
+//         .theLazyMethod(accounts[6], web3.utils.toWei("3000", "ether"))
 //         .encodeABI(),
 //     });
 
@@ -533,7 +533,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[6], web3.utils.toWei("4000", "ether"))
+//         .theLazyMethod(accounts[6], web3.utils.toWei("4000", "ether"))
 //         .encodeABI(),
 //     });
 
@@ -673,7 +673,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("2000", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("2000", "ether"))
 //         .encodeABI(),
 //     });
 //     await web3.eth.sendTransaction({
@@ -843,7 +843,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("500", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("500", "ether"))
 //         .encodeABI(),
 //     });
 //     for (var i = 0; i < 5; i++) {
@@ -869,7 +869,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     balance1 = await oracle.balanceOf(accounts[2]);
@@ -916,7 +916,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[6], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[6], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     await web3.eth.sendTransaction({
@@ -976,7 +976,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("500", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("500", "ether"))
 //         .encodeABI(),
 //     });
 //     for (var i = 0; i < 5; i++) {
@@ -1002,7 +1002,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[1], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[1], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     balance1 = await oracle.balanceOf(accounts[3]);
@@ -1049,7 +1049,7 @@
 //       from: accounts[0],
 //       gas: 7000000,
 //       data: oracle2.methods
-//         .theLazyCoon(accounts[6], web3.utils.toWei("5000", "ether"))
+//         .theLazyMethod(accounts[6], web3.utils.toWei("5000", "ether"))
 //         .encodeABI(),
 //     });
 //     await web3.eth.sendTransaction({

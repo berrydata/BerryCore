@@ -28,7 +28,7 @@ module.exports = async function(callback) {
 let ins = await Oracle.at(myOracle);
 
 for(i=1;i<3;i++){
-await ins.theLazyCoon(myarr[i],web3.utils.toWei('1000', 'ether'))
+await ins.theLazyMethod(myarr[i],web3.utils.toWei('1000', 'ether'))
 }
 
 process.exit()
