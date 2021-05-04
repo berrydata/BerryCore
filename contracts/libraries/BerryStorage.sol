@@ -80,6 +80,9 @@ library BerryStorage {
         // address  keccak256("_owner");//Berry Owner address
         // address  keccak256("_deity");//Berry Owner that can do things at will
         // address  keccak256("pending_owner"); // The proposed new owner
+        // address  keccak256("yield_pool_address"); // yield pool address
+        // address  keccak256("burn_pool_address"); // burn pool address
+        
         mapping(bytes32 => uint256) uintVars;
         //uint fields in the Berry contract are saved the uintVars mapping
         //e.g. uintVars[keccak256("decimals")] = uint
@@ -104,6 +107,8 @@ library BerryStorage {
         // keccak256("devShare"); // The amount directed towards th devShare
         // keccak256("currentTotalTips"); //
         // keccak256("height");
+        // keccak256("yieldPercent"); // for yield pool, in 1e6
+        // keccak256("burnPercent"); // for token to burn, in 1e6
         
         //This is a boolean that tells you if a given challenge has been completed by a given miner
         mapping(bytes32 => mapping(address => bool)) minersByChallenge;
@@ -116,5 +121,7 @@ library BerryStorage {
         mapping(uint256 => Request) requestDetails; //mapping of apiID to details
         mapping(bytes32 => uint256) requestIdByQueryHash; // api bytes32 gets an id = to count of requests array
         mapping(bytes32 => uint256) disputeIdByDisputeHash; //maps a hash to an ID for each dispute
+        
+        mapping(address => bool) whiteList; // mapping of white address list
     }
 }

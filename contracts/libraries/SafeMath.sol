@@ -1,6 +1,6 @@
 pragma solidity ^0.5.16;
 
-//Slightly modified SafeMath library - includes a min and max function, removes useless div function
+//Slightly modified SafeMath library - includes a min and max function
 library SafeMath {
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
@@ -50,5 +50,16 @@ library SafeMath {
             assert(c >= a);
         }
 
+    }
+
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return div(a, b, "SafeMath: division by zero");
+    }
+
+    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b > 0, errorMessage);
+        uint256 c = a / b;
+
+        return c;
     }
 }
