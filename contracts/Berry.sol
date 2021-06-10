@@ -92,6 +92,15 @@ contract Berry {
         berry.setBurnInfo(_address, _percent);
     }
 
+    /**
+    * @dev set needed miner num
+    * @param _num the needed num
+    *
+    */
+    function setNeededMinerNum(uint256 _num) {
+        berry.setNeededMinerNum(_num);
+    }
+
 
     /**
     * @dev Add tip to Request value from oracle
@@ -248,18 +257,4 @@ contract Berry {
         return berry.unlockDisputeFee(_disputeId);
     }
 
-    /*******************TEST Functions NOT INCLUDED ON PRODUCTION/MAINNET/RINKEBY******/
-    /*This is a cheat for demo purposes, will delete upon actual launch*/
-    // function theLazyMethod(address _address, uint _amount) external {
-    //     berry.theLazyMethod(_address,_amount);
-    // }
-
-    // function testSubmitMiningSolution(string calldata _nonce, uint256 _requestId, uint256 _value) external {
-    //     berry.testSubmitMiningSolution(_nonce, _requestId, _value);
-    // }
-
-    // function testSubmitMiningSolution(string calldata _nonce,uint256[5] calldata _requestId, uint256[5] calldata _value) external {
-    //     berry.testSubmitMiningSolution(_nonce,_requestId, _value);
-    // }
-    /***************END TEST Functions NOT INCLUDED ON PRODUCTION/MAINNET/RINKEBY******/
  }

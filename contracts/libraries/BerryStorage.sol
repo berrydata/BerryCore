@@ -109,6 +109,8 @@ library BerryStorage {
         // keccak256("height");
         // keccak256("yieldPercent"); // for yield pool, in 1e6
         // keccak256("burnPercent"); // for token to burn, in 1e6
+        // keccak256("neededMinerNum") // if not set, default is 5
+
         
         //This is a boolean that tells you if a given challenge has been completed by a given miner
         mapping(bytes32 => mapping(address => bool)) minersByChallenge;

@@ -37,6 +37,7 @@ library BerryLibrary {
 
     bytes32 public constant yield_pool_address  = 0x268a9e1f1b69e20810e6bb1a6f81129ea85a7f64c856278523bd5c2c0b511314; // keccak256("yield_pool_address")
     bytes32 public constant burn_pool_address = 0xc6faac53a081d6520f6a4907c3ff5551778c97ec2101c9513fbd7d78eff89354; // keccak256("burn_pool_address")
+    bytes32 public constant neededMinerNum = 0x0b492bade34cced7e60d7dab59d69d3c3a4da9db4a4f5cd58aba92fad4c6409c; // keccak256("neededMinerNum");
 
 
     event TipAdded(address indexed _sender, uint256 indexed _requestId, uint256 _tip, uint256 _totalTips);
@@ -81,6 +82,7 @@ library BerryLibrary {
             self.uintVars[timeTarget] = 180;
             self.uintVars[_tBlock] = 1e18;
             self.uintVars[difficulty] = 1;
+            // TODO
             for(uint i = 0; i< 5;i++){
                 self.currentMiners[i].value = i+1;
                 self.requestQ[self.requestDetails[i+1].apiUintVars[requestQPosition]] = 0;
@@ -112,15 +114,16 @@ library BerryLibrary {
         bytes32 _currChallenge = self.currentChallenge;
         uint256 _timeOfLastNewValue = now - (now % 1 minutes);
         self.uintVars[timeOfLastNewValue] = _timeOfLastNewValue;
-        address[5] memory b;
-        for (uint k = 0; k < 5; k++) {
+        address[5] memory b; // miners
+        uint256 neededNum = _neededMinerNum();
+        for (uint k = 0; k < neededNum; k++) {
             b[k] = _tblock.minersByValue[1][k];
             require(b[k] != address(0), "b is 0 address");
         }
 
-        uint[5] memory a;
-        for (uint k = 0; k < 5; k++) {
-            for (uint i = 1; i < 5; i++) {
+        uint[5] memory a; // values
+        for (uint k = 0; k < 5; k++) { // for each request id
+            for (uint i = 1; i < neededNum; i++) { // for each miner
                 uint256 temp = _tblock.valuesByTimestamp[k][i];
                 address temp2 = _tblock.minersByValue[k][i];
                 uint256 j = i;
@@ -137,7 +140,7 @@ library BerryLibrary {
             BerryStorage.Request storage _request = self.requestDetails[_requestId[k]];
             //Save the official(finalValue), timestamp of it, 5 miners and their submitted values for it, and its block number
             a = _tblock.valuesByTimestamp[k];
-            _request.finalValues[_timeOfLastNewValue] = a[2];
+            _request.finalValues[_timeOfLastNewValue] = a[neededNum/2];
             _request.minersByValue[_timeOfLastNewValue] = _tblock.minersByValue[k];
             _request.valuesByTimestamp[_timeOfLastNewValue] = _tblock.valuesByTimestamp[k];
             delete _tblock.minersByValue[k];
@@ -240,16 +243,23 @@ library BerryLibrary {
 
         self.uintVars[slotProgress]++;
 
-        //If 5 values have been received, adjust the difficulty otherwise sort the values until 5 are received         
-        if (_slotProgress + 1 == 5) { //slotProgress has been incremented, but we're using the variable on stack to save gas
+        //If 5 values have been received, adjust the difficulty otherwise sort the values until 5 are received
+        uint256 neededNum = _neededMinerNum();
+        if (_slotProgress + 1 == neededNum) { //slotProgress has been incremented, but we're using the variable on stack to save gas
             newBlock(self, _nonce, _requestId);
             self.uintVars[slotProgress] = 0;
         }
         emit NonceSubmitted(msg.sender, _nonce, _requestId, _value, _currChallenge);
     }
 
+    function _neededMinerNum(BerryStorage.BerryStorageStruct storage self) internal {
+        // default is 5
+        return self.uintVars[neededMinerNum] ? self.uintVars[neededMinerNum] : 5;
+    }
+
     /**
     * @dev Internal function to calculate and pay rewards to miners
+    * @param a miners
     */
     function _payReward(BerryStorage.BerryStorageStruct storage self, address[5] memory a) internal {
         //update height
@@ -272,16 +282,15 @@ library BerryLibrary {
             BerryTransfer.doTransfer(self, address(this), self.addressVars[burn_pool_address], burnAmount);
 
         reward = reward.sub(yieldAmount).sub(burnAmount);
+        uint256 neededNum = _neededMinerNum();
         //pay the miners
-        for (uint i = 0; i < 5; i++) {
-            BerryTransfer.doTransfer(self, address(this), a[i], (reward + self.uintVars[currentTotalTips]) / 5);
+        for (uint i = 0; i < neededNum; i++) {
+            BerryTransfer.doTransfer(self, address(this), a[i], (reward + self.uintVars[currentTotalTips]) / neededNum);
         }
 
         //update the total supply
         self.uintVars[keccak256("total_supply")] += add_supply;
     }
-
-
 
     /**
     * @dev Allows the current owner to propose transfer control of the contract to a
@@ -376,122 +385,15 @@ library BerryLibrary {
         self.uintVars[burnPercent] = _percent;
     }
 
+    /**
+    * @dev set needed miner num
+    * @param _num the number
+    *
+    */
+    function setNeededMinerNum(BerryStorage.BerryStorageStruct storage self, uint256 _num) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity"); 
+        require(_num >= 1 && _num <=5, "only 1-5 miners are allowed");
 
-/**********************CHEAT Functions for Testing******************************/
-/**********************CHEAT Functions for Testing******************************/
-/**********************CHEAT Functions for Testing--No Nonce******************************/
-
-
-    // /*This is a cheat for demo purposes, will delete upon actual launch*/
-    // function theLazyMethod(BerryStorage.BerryStorageStruct storage self,address _address, uint _amount) public {
-    //     self.uintVars[total_supply] += _amount;
-    //     BerryTransfer.updateBalanceAtNow(self.balances[_address],_amount);
-    // } 
-
-    // /**
-    // * @dev Proof of work is called by the miner when they submit the solution (proof of work and value)
-    // * @param _nonce uint submitted by miner
-    // * @param _requestId the apiId being mined
-    // * @param _value of api query
-    // ** OLD!!!!!!!!
-    // */
-    // function testSubmitMiningSolution(BerryStorage.BerryStorageStruct storage self, string memory _nonce, uint256 _requestId, uint256 _value)
-    //     public
-    // {
-    //     require (self.uintVars[timeTarget] == 600, "Contract has upgraded, call new function");
-    //     //require miner is staked
-    //     require(self.stakerDetails[msg.sender].currentStatus == 1, "Miner status is not staker");
-    //     //Check the miner is submitting the pow for the current request Id
-    //     require(_requestId == self.uintVars[currentRequestId], "RequestId is wrong");
-    //     //Saving the challenge information as unique by using the msg.sender
-    //     // require(
-    //     //     uint256(
-    //     //         sha256(abi.encodePacked(ripemd160(abi.encodePacked(keccak256(abi.encodePacked(self.currentChallenge, msg.sender, _nonce))))))
-    //     //     ) %
-    //     //         self.uintVars[difficulty] ==
-    //     //         0,
-    //     //     "Incorrect nonce for current challenge"
-    //     // );
-    //     //Make sure the miner does not submit a value more than once
-    //     require(self.minersByChallenge[self.currentChallenge][msg.sender] == false, "Miner already submitted the value");
-    //     //Save the miner and value received
-    //     uint256 _slotProgress = self.uintVars[slotProgress]; 
-    //     self.currentMiners[_slotProgress].value = _value;
-    //     self.currentMiners[_slotProgress].miner = msg.sender;
-    //     //Add to the count how many values have been submitted, since only 5 are taken per request
-    //     self.uintVars[slotProgress]++;
-    //     //Update the miner status to true once they submit a value so they don't submit more than once
-    //     self.minersByChallenge[self.currentChallenge][msg.sender] = true;
-    //     //If 5 values have been received, adjust the difficulty otherwise sort the values until 5 are received
-    //     if (_slotProgress + 1 == 5) {
-    //         newBlock(self, _nonce, _requestId);
-    //     }
-    // }
-
-    // /**
-    // * @dev Proof of work is called by the miner when they submit the solution (proof of work and value)
-    // * @param _nonce uint submitted by miner
-    // * @param _requestId is the array of the 5 PSR's being mined
-    // * @param _value is an array of 5 values
-    // */
-    // function testSubmitMiningSolution(BerryStorage.BerryStorageStruct storage self, string memory _nonce,uint256[5] memory _requestId, uint256[5] memory _value)
-    //     public
-    // {
-    //     bytes32 _hashMsgSender = keccak256(abi.encode(msg.sender));
-    //     require(self.stakerDetails[msg.sender].currentStatus == 1, "Miner status is not staker");
-    //     //require(now - self.uintVars[_hashMsgSender] > 15 minutes, "Miner can only win rewards once per 15 min");
-    //     require(_requestId[0] ==  self.currentMiners[0].value,"Request ID is wrong");
-    //     require(_requestId[1] ==  self.currentMiners[1].value,"Request ID is wrong");
-    //     require(_requestId[2] ==  self.currentMiners[2].value,"Request ID is wrong");
-    //     require(_requestId[3] ==  self.currentMiners[3].value,"Request ID is wrong");
-    //     require(_requestId[4] ==  self.currentMiners[4].value,"Request ID is wrong");
-    //     self.uintVars[_hashMsgSender] = now;
-
-    //     bytes32 _currChallenge = self.currentChallenge;
-    //     uint256 _slotProgress = self.uintVars[slotProgress];
-
-    //     //Saving the challenge information as unique by using the msg.sender
-    //     // require(uint256(
-    //     //         sha256(abi.encodePacked(ripemd160(abi.encodePacked(keccak256(abi.encodePacked(self.currentChallenge, msg.sender, _nonce))))))
-    //     //     ) %
-    //     //         self.uintVars[difficulty] == 0
-    //     //         || (now - (now % 1 minutes)) - self.uintVars[timeOfLastNewValue] >= 15 minutes,
-    //     //     "Incorrect nonce for current challenge"
-    //     // );
-
-    //     //Checking and updating Miner Status
-    //     require(self.minersByChallenge[_currChallenge][msg.sender] == false, "Miner already submitted the value");
-    //     //Update the miner status to true once they submit a value so they don't submit more than once
-    //     self.minersByChallenge[_currChallenge][msg.sender] = true;
-
-    //     //Updating Request
-    //     BerryStorage.Request storage _tblock = self.requestDetails[self.uintVars[_tBlock]];
-    //     _tblock.minersByValue[1][_slotProgress]= msg.sender; 
-    //     //this will fill the currentMiners array
-    //     _tblock.valuesByTimestamp[0][_slotProgress] = _value[0];
-    //     _tblock.valuesByTimestamp[1][_slotProgress] = _value[1];
-    //     _tblock.valuesByTimestamp[2][_slotProgress] = _value[2];
-    //     _tblock.valuesByTimestamp[3][_slotProgress] = _value[3];
-    //     _tblock.valuesByTimestamp[4][_slotProgress] = _value[4];
-    //     //Save the miner and value received
-    //     _tblock.minersByValue[0][self.uintVars[slotProgress]]= msg.sender;
-    //     _tblock.minersByValue[1][self.uintVars[slotProgress]]= msg.sender;
-    //     _tblock.minersByValue[2][self.uintVars[slotProgress]]= msg.sender;
-    //     _tblock.minersByValue[3][self.uintVars[slotProgress]]= msg.sender;
-    //     _tblock.minersByValue[4][self.uintVars[slotProgress]]= msg.sender;
-      
-
-    //     //Internal Function Added to allow for more stack variables
-    //     _payReward(self, _slotProgress);
-    //     self.uintVars[slotProgress]++;
-
-    //     //If 5 values have been received, adjust the difficulty otherwise sort the values until 5 are received 
-    //     if (_slotProgress + 1 == 5) { //slotProgress has been incremented, but we're using the variable on stack to save gas
-    //         newBlock(self, _nonce, _requestId);
-    //         self.uintVars[slotProgress] = 0;
-    //     }
-
-    //     emit NonceSubmitted(msg.sender, _nonce, _requestId, _value, _currChallenge);
-       
-    // }
+        self.uintVars[neededMinerNum] = _num;
+    }
 }

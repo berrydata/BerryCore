@@ -174,6 +174,4 @@ library BerryStake {
         }
     }
 
-
-   
 }
