@@ -97,7 +97,7 @@ contract Berry {
     * @param _num the needed num
     *
     */
-    function setNeededMinerNum(uint256 _num) {
+    function setNeededMinerNum(uint256 _num) public {
         berry.setNeededMinerNum(_num);
     }
 

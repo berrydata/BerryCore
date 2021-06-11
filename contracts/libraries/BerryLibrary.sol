@@ -115,7 +115,7 @@ library BerryLibrary {
         uint256 _timeOfLastNewValue = now - (now % 1 minutes);
         self.uintVars[timeOfLastNewValue] = _timeOfLastNewValue;
         address[5] memory b; // miners
-        uint256 neededNum = _neededMinerNum();
+        uint256 neededNum = _neededMinerNum(self);
         for (uint k = 0; k < neededNum; k++) {
             b[k] = _tblock.minersByValue[1][k];
             require(b[k] != address(0), "b is 0 address");
@@ -244,7 +244,7 @@ library BerryLibrary {
         self.uintVars[slotProgress]++;
 
         //If 5 values have been received, adjust the difficulty otherwise sort the values until 5 are received
-        uint256 neededNum = _neededMinerNum();
+        uint256 neededNum = _neededMinerNum(self);
         if (_slotProgress + 1 == neededNum) { //slotProgress has been incremented, but we're using the variable on stack to save gas
             newBlock(self, _nonce, _requestId);
             self.uintVars[slotProgress] = 0;
@@ -252,9 +252,9 @@ library BerryLibrary {
         emit NonceSubmitted(msg.sender, _nonce, _requestId, _value, _currChallenge);
     }
 
-    function _neededMinerNum(BerryStorage.BerryStorageStruct storage self) internal {
+    function _neededMinerNum(BerryStorage.BerryStorageStruct storage self) internal returns (uint256) {
         // default is 5
-        return self.uintVars[neededMinerNum] ? self.uintVars[neededMinerNum] : 5;
+        return self.uintVars[neededMinerNum] != 0 ? self.uintVars[neededMinerNum] : 5;
     }
 
     /**
@@ -282,7 +282,7 @@ library BerryLibrary {
             BerryTransfer.doTransfer(self, address(this), self.addressVars[burn_pool_address], burnAmount);
 
         reward = reward.sub(yieldAmount).sub(burnAmount);
-        uint256 neededNum = _neededMinerNum();
+        uint256 neededNum = _neededMinerNum(self);
         //pay the miners
         for (uint i = 0; i < neededNum; i++) {
             BerryTransfer.doTransfer(self, address(this), a[i], (reward + self.uintVars[currentTotalTips]) / neededNum);
