@@ -101,6 +101,10 @@ contract Berry {
         berry.setNeededMinerNum(_num);
     }
 
+    function setTimeTarget(uint256 _target) public {
+        berry.setTimeTarget(_target);
+    }
+
 
     /**
     * @dev Add tip to Request value from oracle

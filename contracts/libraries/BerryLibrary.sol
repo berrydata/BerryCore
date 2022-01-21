@@ -39,7 +39,6 @@ library BerryLibrary {
     bytes32 public constant burn_pool_address = 0xc6faac53a081d6520f6a4907c3ff5551778c97ec2101c9513fbd7d78eff89354; // keccak256("burn_pool_address")
     bytes32 public constant neededMinerNum = 0x0b492bade34cced7e60d7dab59d69d3c3a4da9db4a4f5cd58aba92fad4c6409c; // keccak256("neededMinerNum");
 
-
     event TipAdded(address indexed _sender, uint256 indexed _requestId, uint256 _tip, uint256 _totalTips);
     //emits when a new challenge is created (either on mined block or when a new request is pushed forward on waiting system)
     event NewChallenge(
@@ -79,7 +78,7 @@ library BerryLibrary {
 
         // for init
         if (self.uintVars[_tBlock] == 0 && self.uintVars[requestCount] >= 5) {
-            self.uintVars[timeTarget] = 180;
+            self.uintVars[timeTarget] = 180; // 3 minutes
             self.uintVars[_tBlock] = 1e18;
             self.uintVars[difficulty] = 1;
             // TODO
@@ -103,13 +102,14 @@ library BerryLibrary {
         // If the difference between the timeTarget and how long it takes to solve the challenge this updates the challenge
         //difficulty up or donw by the difference between the target time and how long it took to solve the previous challenge
         //otherwise it sets it to 1
-        int256 _change = int256(SafeMath.min(1200, (now - self.uintVars[timeOfLastNewValue])));
+        int256 _change = int256(SafeMath.min(5400, (now - self.uintVars[timeOfLastNewValue])));
         int256 _diff = int256(self.uintVars[difficulty]);
         _change = (_diff * (int256(self.uintVars[timeTarget]) - _change)) / 4000;
         if (_change == 0) {
-                _change = 1;
-            }
+            _change = 1;
+        }
         self.uintVars[difficulty]  = uint256(SafeMath.max(_diff + _change,1));
+
         //Sets time of value submission rounded to 1 minute
         bytes32 _currChallenge = self.currentChallenge;
         uint256 _timeOfLastNewValue = now - (now % 1 minutes);
@@ -201,7 +201,10 @@ library BerryLibrary {
         // only allow white list address to mine
         require(self.whiteList[msg.sender] == true, "Only white list miner can mine");
         
-        //require(now - self.uintVars[_hashMsgSender] > 2 minutes, "Miner can only win rewards once per 2 min");
+        uint256 rewardPeriod = 15 minutes;
+        rewardPeriod = rewardPeriod.mul(_targetTimes());
+        require(now - self.uintVars[_hashMsgSender] > rewardPeriod, "Miner can only win rewards once per reward period");
+
         require(_requestId[0] ==  self.currentMiners[0].value,"Request ID is wrong");
         require(_requestId[1] ==  self.currentMiners[1].value,"Request ID is wrong");
         require(_requestId[2] ==  self.currentMiners[2].value,"Request ID is wrong");
@@ -217,7 +220,7 @@ library BerryLibrary {
                 sha256(abi.encodePacked(ripemd160(abi.encodePacked(keccak256(abi.encodePacked(_currChallenge, msg.sender, _nonce))))))
             ) %
                 self.uintVars[difficulty] == 0
-                || (now - (now % 1 minutes)) - self.uintVars[timeOfLastNewValue] >= 15 minutes,
+                || (now - (now % 1 minutes)) - self.uintVars[timeOfLastNewValue] >= 121 minutes,
             "Incorrect nonce for current challenge"
         );
 
@@ -257,6 +260,10 @@ library BerryLibrary {
         return self.uintVars[neededMinerNum] != 0 ? self.uintVars[neededMinerNum] : 5;
     }
 
+    function _targetTimes(BerryStorage.BerryStorageStruct storage self) internal returns (uint256) {
+        return self.uintVars[timeTarget] != 0 ? (self.uintVars[timeTarget] / 180) : 1;
+    }
+
     /**
     * @dev Internal function to calculate and pay rewards to miners
     * @param a miners
@@ -268,7 +275,7 @@ library BerryLibrary {
         if (self.uintVars[keccak256("height")] > 518400) {
             reward = 0;
         } else {
-            reward = 9645061728395060000;
+            reward = _targetTimes().mul(9645061728395060000);
         }
         uint256 add_supply = reward;
 
@@ -395,5 +402,17 @@ library BerryLibrary {
         require(_num >= 1 && _num <=5, "only 1-5 miners are allowed");
 
         self.uintVars[neededMinerNum] = _num;
+    }
+
+    /**
+    * @dev set time target
+    * @param _target in seconds
+    *
+    */
+    function setTimeTarget(BerryStorage.BerryStorageStruct storage self, uint256 _target) public {
+        require(self.addressVars[keccak256("_deity")] == msg.sender, "Sender is not deity"); 
+        require(_target / 180 * 180 == _target, "should times of 3 minutes");
+
+        self.uintVars[timeTarget] = _target;
     }
 }
