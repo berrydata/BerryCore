@@ -102,11 +102,21 @@ library BerryLibrary {
         // If the difference between the timeTarget and how long it takes to solve the challenge this updates the challenge
         //difficulty up or donw by the difference between the target time and how long it took to solve the previous challenge
         //otherwise it sets it to 1
-        int256 _change = int256(SafeMath.min(5400, (now - self.uintVars[timeOfLastNewValue])));
+
         int256 _diff = int256(self.uintVars[difficulty]);
+        int256 _change = int256(SafeMath.min(1200 * SafeMath.sqrt(_targetTimes(self)), (now - self.uintVars[timeOfLastNewValue])));
+
+        // 0. Original Method
         _change = (_diff * (int256(self.uintVars[timeTarget]) - _change)) / 4000;
+
+        // 1. Sqrt Multiplier Method
+        // _change = int256(SafeMath.sqrt(_targetTimes(self))) * (_diff * (int256(self.uintVars[timeTarget]) - _change)) / 4000;
+
+        // 2. Slope Multiplier Method
+        // _change = int256(self.uintVars[timeTarget]) * (_diff * (int256(self.uintVars[timeTarget]) - _change)) / _change / 4000;
+
         if (_change == 0) {
-            _change = 1;
+            _change = int256(_targetTimes(self));
         }
         self.uintVars[difficulty]  = uint256(SafeMath.max(_diff + _change,1));
 
@@ -200,10 +210,8 @@ library BerryLibrary {
         require(self.stakerDetails[msg.sender].currentStatus == 1, "Miner status is not staker");
         // only allow white list address to mine
         require(self.whiteList[msg.sender] == true, "Only white list miner can mine");
-        
-        uint256 rewardPeriod = 15 minutes;
-        rewardPeriod = rewardPeriod.mul(_targetTimes());
-        require(now - self.uintVars[_hashMsgSender] > rewardPeriod, "Miner can only win rewards once per reward period");
+
+        // require(now - self.uintVars[_hashMsgSender] > 10 minutes, "Miner can only win rewards once per 10 min");
 
         require(_requestId[0] ==  self.currentMiners[0].value,"Request ID is wrong");
         require(_requestId[1] ==  self.currentMiners[1].value,"Request ID is wrong");
@@ -255,12 +263,12 @@ library BerryLibrary {
         emit NonceSubmitted(msg.sender, _nonce, _requestId, _value, _currChallenge);
     }
 
-    function _neededMinerNum(BerryStorage.BerryStorageStruct storage self) internal returns (uint256) {
+    function _neededMinerNum(BerryStorage.BerryStorageStruct storage self) internal view returns (uint256) {
         // default is 5
         return self.uintVars[neededMinerNum] != 0 ? self.uintVars[neededMinerNum] : 5;
     }
 
-    function _targetTimes(BerryStorage.BerryStorageStruct storage self) internal returns (uint256) {
+    function _targetTimes(BerryStorage.BerryStorageStruct storage self) internal view returns (uint256) {
         return self.uintVars[timeTarget] != 0 ? (self.uintVars[timeTarget] / 180) : 1;
     }
 
@@ -275,7 +283,7 @@ library BerryLibrary {
         if (self.uintVars[keccak256("height")] > 518400) {
             reward = 0;
         } else {
-            reward = _targetTimes().mul(9645061728395060000);
+            reward = _targetTimes(self).mul(9645061728395060000);
         }
         uint256 add_supply = reward;
 

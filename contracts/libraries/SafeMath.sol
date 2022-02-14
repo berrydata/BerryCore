@@ -62,4 +62,14 @@ library SafeMath {
 
         return c;
     }
+
+    function sqrt(uint256 a) internal pure returns (uint256) {
+        uint256 c = (a + 1) / 2;
+        uint256 b = a;
+        while (c < b) {
+            b = c;
+            c = (a / c + c) / 2;
+        }
+        return b;
+    }
 }
